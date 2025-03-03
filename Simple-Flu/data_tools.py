@@ -10,13 +10,36 @@ import plotly.io as pio
 import requests
 
 # Use the Epistemix default plotly template
-r = requests.get("https://gist.githubusercontent.com/daniel-epistemix/8009ad31ebfa96ac97b7be038c014c0d/raw/320c3b0ca3dfbf7946e49c97254fa65d4753aeac/epx_plotly_theme.json")
+r = requests.get(
+    "https://gist.githubusercontent.com/daniel-epistemix/8009ad31ebfa96ac97b7be038c014c0d/raw/320c3b0ca3dfbf7946e49c97254fa65d4753aeac/epx_plotly_theme.json"
+)
 if r.status_code == 200:
-    pio.templates["epistemix"] = go.layout.Template(r.json())
+    template = r.json()
+    # add 2 colors to allow 12 distinct colors on a plot
+    template["layout"]["colorway"] += ["#F47B7B", "#2E93B7"]
+    pio.templates["epistemix"] = go.layout.Template(template)
     pio.templates.default = "epistemix"
 
 MAPSTYLE = "mapbox://styles/epxadmin/cm0ve9m13000501nq8q1zdf5p"
 TOKEN = "pk.eyJ1IjoiZXB4YWRtaW4iLCJhIjoiY20wcmV1azZ6MDhvcTJwcTY2YXpscWsxMSJ9._ROunfMS6hgVh1LPQZ4NGg"
+
+MAP_SEX = {0: "female", 1: "male"}
+MAP_DEMOG = {
+    "demog_group": [
+        "0-18, female, racial minority",
+        "0-18, female, white",
+        "0-18, male, racial minority",
+        "0-18, male, white",
+        "19-65, female, racial minority",
+        "19-65, female, white",
+        "19-65, male, racial minority",
+        "19-65, male, white",
+        ">65, female, racial minority",
+        ">65, female, white",
+        ">65, male, racial minority",
+        ">65, male, white",
+    ]
+}
 
 
 def get_states(job):
@@ -105,10 +128,7 @@ def get_sim_exposures_by_location(df: pd.DataFrame) -> pd.DataFrame:
        legend. This is a workaround for the Plotly issue described
        here https://github.com/plotly/plotly.js/issues/2861
     """
-    return (
-        df.pipe(_standardize_exposure_coords)
-        .pipe(_add_dummy_exposure_locations)
-    )
+    return df.pipe(_standardize_exposure_coords).pipe(_add_dummy_exposure_locations)
 
 
 def _standardize_exposure_coords(df: pd.DataFrame) -> pd.DataFrame:
@@ -157,7 +177,7 @@ def get_sim_exposures_by_demog_group(df: pd.DataFrame) -> pd.DataFrame:
 
     Included demographic groups are specified in `_assign_demog_group`.
     """
-    
+
     return (
         df.pipe(_standardize_exposure_coords)
         .pipe(_assign_demog_group)
@@ -170,7 +190,7 @@ def _assign_demog_group(df: pd.DataFrame) -> pd.DataFrame:
     return (
         df.assign(
             race_group=lambda df: (
-                df["race"].apply(lambda x: "White" if x == 1 else "Minority ethnic")
+                df["race"].apply(lambda x: "white" if x == 1 else "racial minority")
             )
         )
         .assign(
@@ -183,8 +203,12 @@ def _assign_demog_group(df: pd.DataFrame) -> pd.DataFrame:
                 )
             )
         )
+        .assign(sex=lambda df: (df["sex"].replace(MAP_SEX)))
         .assign(
-            demog_group=lambda df: df["race_group"].str.cat(df["age_group"], sep=", ")
+            # demog_group=lambda df: df["race_group"].str.cat(df["age_group"], sep=", ")
+            demog_group=lambda df: df["age_group"].str.cat(
+                df[["sex", "race_group"]], sep=", "
+            )
         )
     )
 
@@ -240,16 +264,7 @@ def plot_animation_by_exposure_location(df: pd.DataFrame) -> plotly.graph_objs.F
 
 
 def plot_animation_by_demog_group(df: pd.DataFrame) -> plotly.graph_objs.Figure:
-    category_orders = {
-        "demog_group": [
-            "White, 0-18",
-            "White, 19-65",
-            "White, >65",
-            "Minority ethnic, 0-18",
-            "Minority ethnic, 19-65",
-            "Minority ethnic, >65",
-        ]
-    }
+    category_orders = MAP_DEMOG
 
     sim_exposures = get_sim_exposures_by_demog_group(df).sort_values(by="today")
     sim_exposures.today = pd.to_datetime(sim_exposures.today).dt.date
@@ -280,14 +295,7 @@ def plot_time_series_by_demog_group(df: pd.DataFrame) -> plotly.graph_objs.Figur
         .swaplevel()
         # Ensure entries appear in the legend in the required order
         .loc[
-            [
-                "White, 0-18",
-                "White, 19-65",
-                "White, >65",
-                "Minority ethnic, 0-18",
-                "Minority ethnic, 19-65",
-                "Minority ethnic, >65",
-            ],
+            MAP_DEMOG["demog_group"],
             :,
         ]
         .rename("n_exposures")
@@ -309,8 +317,9 @@ def plot_time_series_by_demog_group(df: pd.DataFrame) -> plotly.graph_objs.Figur
 
     return fig
 
-def plot_scenario_ecdf(jobs = [], scenarios = [], scenario_name = ""):
-    
+
+def plot_scenario_ecdf(jobs=[], scenarios=[], scenario_name=""):
+
     job_dfs = []
     job_peak_dates = []
     job_peak_y = []
@@ -325,18 +334,20 @@ def plot_scenario_ecdf(jobs = [], scenarios = [], scenario_name = ""):
         job_peak_y.append(df_to_max_row["Exposed"].sum())
         job_df["Scenario"] = scenario
         job_dfs.append(job_df)
-        
+
     df = pd.concat(job_dfs)
     fig = px.ecdf(df, x="sim_date", y="Exposed", color="Scenario", ecdfnorm=None)
-    
-    fig.add_trace(go.Scatter(
-        x=job_peak_dates,
-        y=job_peak_y,
-        mode="markers+text",
-        text=[f"{peak}" for peak in job_peak_vals],
-        textposition="top center",
-        name="Size of Peak"
-    ))
+
+    fig.add_trace(
+        go.Scatter(
+            x=job_peak_dates,
+            y=job_peak_y,
+            mode="markers+text",
+            text=[f"{peak}" for peak in job_peak_vals],
+            textposition="top center",
+            name="Size of Peak",
+        )
+    )
 
     fig.update_layout(
         font_family="Epistemix Label",
@@ -344,8 +355,22 @@ def plot_scenario_ecdf(jobs = [], scenarios = [], scenario_name = ""):
         xaxis_title="Date",
         title=f"Scenario Exploration: {scenario_name}",
         title_font_size=24,
-        xaxis_range=["2023-01-01","2023-06-30"],
-        hovermode="x",height=450,
+        xaxis_range=["2023-01-01", "2023-06-30"],
+        hovermode="x",
+        height=450,
     )
-    
+
     return fig
+
+
+def get_exposure_table_by_demog_group(exposures: pd.DataFrame) -> pd.DataFrame:
+    df = get_sim_exposures_by_demog_group(exposures)
+    # group by age, sex, race and count
+    table = (
+        df.groupby(["age_group", "sex", "race_group"], observed=True)
+        .size()
+        .reset_index(name="exposures")
+        .rename(columns={"race_group": "race"})
+    )
+    # rename columns and return
+    return table

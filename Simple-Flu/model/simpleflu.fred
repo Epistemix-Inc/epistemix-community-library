@@ -13,13 +13,14 @@ place Household {
 variables {
     agent numeric income
     agent numeric race
+    agent numeric sex
     agent numeric my_exposure_location
     agent numeric my_exposure_latitude
     agent numeric my_exposure_longitude  
 }
 
 startup {
-    open_csv(exposure_locs.csv, "id", "race", "age", "household_income", \
+    open_csv(exposure_locs.csv, "id", "race", "age", "sex", "household_income", \
         "today", "my_resp_exp_loc", "my_exp_lat", "my_exp_lon", "lat_house", \
         "long_house")
 }
@@ -218,7 +219,7 @@ condition RECORD_EXPOSURES {
     
     state Record {
         if (is_member(Household)) then print_csv( \
-            exposure_locs.csv, id(), race, age(), income, today(), \
+            exposure_locs.csv, id(), race, age(), sex, income, today(), \
             my_exposure_location, my_exposure_latitude, my_exposure_longitude, \
             latitude(Household), longitude(Household) \
         )
