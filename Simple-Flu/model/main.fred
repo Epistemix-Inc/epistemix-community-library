@@ -8,3 +8,5 @@ comment {
 }
 
 include simpleflu.fred
+include stayhome.fred
+include vaccine.fred
