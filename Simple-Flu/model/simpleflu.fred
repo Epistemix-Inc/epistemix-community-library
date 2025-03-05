@@ -16,13 +16,18 @@ variables {
     agent numeric sex
     agent numeric my_exposure_location
     agent numeric my_exposure_latitude
-    agent numeric my_exposure_longitude  
+    agent numeric my_exposure_longitude
+    
+    shared numeric transmissibility_reduction
 }
 
 startup {
     open_csv(exposure_locs.csv, "id", "race", "age", "sex", "household_income", \
         "today", "my_resp_exp_loc", "my_exp_lat", "my_exp_lon", "lat_house", \
         "long_house")
+}
+startup {
+    set_trans(RESP_DISEASE, get_transmissibility(RESP_DISEASE) - transmissibility_reduction)
 }
 
 agent_startup {

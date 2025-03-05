@@ -1,4 +1,5 @@
 from itertools import product
+from typing import Tuple, List
 
 import pandas as pd
 import numpy as np
@@ -7,6 +8,7 @@ import plotly
 import plotly.express as px
 import plotly.graph_objects as go
 import plotly.io as pio
+from plotly.subplots import make_subplots
 import requests
 
 # Use the Epistemix default plotly template
@@ -68,6 +70,19 @@ def get_states(job):
         inplace=True,
     )
     return states
+
+
+def get_scenario_explocs(
+    job, low: dict, high: dict
+) -> Tuple[List[Tuple[str, pd.DataFrame]], List[Tuple[str, pd.DataFrame]]]:
+    states = get_states(job)
+    return [
+        (name, states.groupby("sim_date").nth(run_id).reset_index())
+        for run_id, name in low.items()
+    ], [
+        (name, states.groupby("sim_date").nth(run_id).reset_index())
+        for run_id, name in high.items()
+    ]
 
 
 def get_explocs(job):
@@ -227,6 +242,93 @@ def _add_dummy_demog_group(df: pd.DataFrame) -> pd.DataFrame:
             ),
         ]
     )
+
+
+def plot_epicurves(df: pd.DataFrame) -> plotly.graph_objs.Figure:
+    fig = go.Figure()
+
+    for x in ["Exposed", "InfectiousA", "InfectiousS", "Recovered"]:
+        fig.add_trace(
+            go.Scatter(
+                x=df["sim_date"],
+                y=df[x],
+                mode="lines",
+                line=go.scatter.Line(width=3),
+                showlegend=True,
+                name=x,
+            )
+        )
+
+    fig.update_layout(
+        font_family="Epistemix Label",
+        yaxis_title="New infections per day",
+        xaxis_title="Date",
+        legend_title="State",
+        xaxis_range=["2023-01-01", "2023-04-01"],
+        hovermode="x",
+        height=450,
+    )
+
+    return fig
+
+
+def plot_epicurve_scenarios(
+    scenario_list: List[Tuple[str, pd.DataFrame]], trans: str = "low"
+) -> plotly.graph_objs.Figure:
+
+    fig = make_subplots(
+        rows=2,
+        cols=2,
+        subplot_titles=[tup[0] for tup in scenario_list],
+        shared_yaxes=True,
+        shared_xaxes=True,
+    )
+
+    row = 1
+    col = 1
+
+    for title, states in scenario_list:
+        for trace in plot_epicurves(states).data:
+            trace.legendgroup = ""
+            trace.showlegend = bool(row + col > 3)
+            fig.add_trace(trace, row=row, col=col)
+        col += 1
+        if col > 2:
+            row += 1
+            col = 1
+
+    fig.update_layout(
+        height=600,
+        width=710,
+        title_text=f"{trans.title()} Transmissibility Strain",
+        colorway=pio.templates["epistemix"]["layout"]["colorway"][:4] * 4,
+    )
+    return fig
+
+
+def plot_static_exposure_locations(df: pd.DataFrame) -> plotly.graph_objs.Figure:
+    fig = px.scatter_mapbox(
+        df,
+        lat="my_exp_lat",
+        lon="my_exp_lon",
+        color="ExposureLocation",
+        color_discrete_sequence=["#F0438D", "#2BD6AF", "#A76FF4"],
+        opacity=0.8,
+        size="exp_scale",
+        size_max=12,
+        zoom=9.25,
+        height=600,
+        hover_data={"exp_scale": False, "NumberExposed": True},
+    )
+
+    fig.update_layout(mapbox_style=MAPSTYLE, mapbox_accesstoken=TOKEN)
+    fig.update_layout(margin={"r": 0, "t": 60, "l": 0, "b": 0})
+    fig.update_layout(
+        title="Sites of Influenza Exposure",
+        title_font_size=24,
+    )
+    fig.update_layout(legend_title_text="Exposure location type")
+    return fig
 
 
 def plot_animation_by_exposure_location(df: pd.DataFrame) -> plotly.graph_objs.Figure:
