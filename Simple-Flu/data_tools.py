@@ -280,8 +280,8 @@ def plot_epicurve_scenarios(
         rows=2,
         cols=2,
         subplot_titles=[tup[0] for tup in scenario_list],
-        shared_yaxes=True,
-        shared_xaxes=True,
+        shared_yaxes="all",
+        shared_xaxes="all",
     )
 
     row = 1
