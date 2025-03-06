@@ -4,7 +4,7 @@ matplotlib
 networkx
 folium
 jupyterlab
-plotly>=5.18.0
+plotly>=5.18.0,<6.0.0
 # The notebooks in this repo depend on epx. This is assumed to be already
 # installed in the environment at runtime since we don't currently have a
 # robust way of installing it via pip.
