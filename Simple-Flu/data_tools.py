@@ -220,7 +220,6 @@ def _assign_demog_group(df: pd.DataFrame) -> pd.DataFrame:
         )
         .assign(sex=lambda df: (df["sex"].replace(MAP_SEX)))
         .assign(
-            # demog_group=lambda df: df["race_group"].str.cat(df["age_group"], sep=", ")
             demog_group=lambda df: df["age_group"].str.cat(
                 df[["sex", "race_group"]], sep=", "
             )
