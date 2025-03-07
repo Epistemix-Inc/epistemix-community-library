@@ -1,9 +1,0 @@
-comment {
-
-    An extension of the basic respiratory disease model with a behavioral component:
-        Agents may stay home when they are sick and have symptoms.
-
-}
-
-include ./../../model/simpleflu.fred
-include stayhome.fred
