@@ -22,6 +22,7 @@ if r.status_code == 200:
     pio.templates["epistemix"] = go.layout.Template(template)
     pio.templates.default = "epistemix"
 
+SWEEP_SEEDS = [574869, 724459, 214663, 539938, 14057, 685330, 254971, 907131]
 MAPSTYLE = "mapbox://styles/epxadmin/cm0ve9m13000501nq8q1zdf5p"
 TOKEN = "pk.eyJ1IjoiZXB4YWRtaW4iLCJhIjoiY20wcmV1azZ6MDhvcTJwcTY2YXpscWsxMSJ9._ROunfMS6hgVh1LPQZ4NGg"
 
