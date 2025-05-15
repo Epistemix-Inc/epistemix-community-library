@@ -5,5 +5,3 @@ comment {
 
 }
 
-include ./../../model/simpleflu.fred
-include stayhome.fred

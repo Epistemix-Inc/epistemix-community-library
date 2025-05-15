@@ -5,9 +5,6 @@ comment {
 
 }
 
-include ./../../model/simpleflu.fred
-include stayhome.fred
-include vaccine.fred
 
 variables {
     
