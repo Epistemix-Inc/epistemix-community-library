@@ -7,6 +7,3 @@ comment {
     Tommy Nelson : tommy.nelson@epistemix.com
 }
 
-include simpleflu.fred
-include stayhome.fred
-include vaccine.fred

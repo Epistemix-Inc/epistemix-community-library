@@ -9,7 +9,3 @@ variables {
 	agent numeric sex
 }
 
-include mpox.fred
-include msm.fred
-include bathhouse.fred
-include test_report.fred
