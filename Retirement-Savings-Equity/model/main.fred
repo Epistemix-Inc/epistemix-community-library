@@ -1,3 +1,0 @@
-include setup_agents.fred
-include saving.fred
-include mortality.fred

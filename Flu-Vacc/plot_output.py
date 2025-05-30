@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import plotly.io as pio
 from plotly.subplots import make_subplots
 
-from epx import Job
+from epx import FREDJob
 
 # Import Epistemix plotly template for visualization
 import requests

@@ -3,11 +3,18 @@ variables {
     shared numeric flu_delay
     shared numeric initial_vaccines
     shared numeric vaccine_delay
-    shared numeric vaccine_effectiveness
-    shared numeric willing_to_consider
+    shared numeric vaccine_effectiveness\
+    # vary the following parameter to get "low" and "high" vaccine sentiment scenarios
+    shared numeric willing_to_consider_vaccine 
 }
 
-include vaccine_parameters.fred
+startup {
+    days_until_effective = 14
+    flu_delay = 15
+    initial_vaccines = 0.3
+    vaccine_delay = 0
+    vaccine_effectiveness = 0.8
+}
 
 condition RESP_DISEASE_VACCINE {
     meta_start_state = ImportStart
@@ -18,7 +25,7 @@ condition RESP_DISEASE_VACCINE {
 
     state Start {
         wait(0)
-        next(Considering) with prob(willing_to_consider)
+        next(Considering) with prob(willing_to_consider_vaccine)
         default(Excluded)
     }
 

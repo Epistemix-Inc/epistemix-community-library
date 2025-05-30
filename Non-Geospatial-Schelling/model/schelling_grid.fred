@@ -1,8 +1,3 @@
 comment {
     STANDARD SCHELLING MODEL ON A GRID
 }
-
-include core.fred
-include setup_network_grid.fred
-include happiness.fred
-include rewire_grid.fred

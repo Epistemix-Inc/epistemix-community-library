@@ -24,7 +24,3 @@ startup {
         ) \
     )
 }
-
-include flu_season_transmission.fred
-include update_behavior.fred
-include record.fred

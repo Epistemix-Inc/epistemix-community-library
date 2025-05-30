@@ -6,8 +6,6 @@ variables {
     agent numeric exposed
 }
 
-include ./../../model/flu_season_transmission.fred
-
 state INFLUENZA.Exposed {
     set_state(RECORD_EXPOSURES, Record)
 }

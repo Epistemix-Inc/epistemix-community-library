@@ -13,7 +13,3 @@ comment {
 
 
 
-include configure_dr_office.fred
-include configure_agent_health.fred
-include get_local_dr_office.fred
-include health_update.fred

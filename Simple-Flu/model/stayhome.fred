@@ -1,3 +1,7 @@
+variables {
+    shared numeric stay_home_prob # set to val > 0 to introduce "stay home" behavior 
+}
+
 condition STAY_HOME {
     start_state = No
 
@@ -16,7 +20,7 @@ condition STAY_HOME {
 }
 
 state RESP_DISEASE.InfectiousSymptomatic {
-    if (bernoulli(0.5)) then set_state(STAY_HOME, Yes)
+    if (bernoulli(stay_home_prob)) then set_state(STAY_HOME, Yes)
 }
 
 state RESP_DISEASE.Recovered {
