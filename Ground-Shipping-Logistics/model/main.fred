@@ -1,7 +1,3 @@
 simulation {
     default_model=none
 }
-
-include city_locations.fred
-include trucks.fred
-include travel_disruption.fred

@@ -4,6 +4,4 @@ startup {
     open_csv(idea_evolution.csv, "ID", "simday", "my_x", "my_y", "my_origin")
 }
 
-include network_random_weight.fred
-include idea_evo.fred
 
