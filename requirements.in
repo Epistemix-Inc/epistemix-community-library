@@ -1,7 +1,7 @@
 pandas
 numpy
 matplotlib
-networkx
+networkx=3.4.2
 folium
 jupyterlab
 plotly>=5.18.0,<6.0.0
