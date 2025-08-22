@@ -5,8 +5,8 @@
 
 set -euox pipefail
 
-# Change to script's directory
-cd "$(dirname "$0")"
+# Change to repository root directory
+cd "$(dirname "$0")/.."
 
 echo "Setting up notebook testing environment..."
 
@@ -28,7 +28,7 @@ python -c "from epx import FREDJob, FREDModelConfig, SynthPop; print('epx import
 
 # Run the tests
 echo "Running notebook tests..."
-python -m pytest --nbmake . -v
+pytest tests/ -v
 
 TEST_RESULT=$?
 

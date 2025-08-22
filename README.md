@@ -59,7 +59,7 @@ Unit tests are available to verify that all Jupyter notebooks in the repository 
 #### Running Tests
 Use the automated wrapper script:
 ```shell
-./run_notebook_tests.sh
+./tests/run_notebook_tests.sh
 ```
 
 ### Deployment
