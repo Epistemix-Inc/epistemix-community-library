@@ -1,2 +1,7 @@
 nbstripout
 black[jupyter]
+pytest
+ipykernel
+nbconvert
+# Runtime dependencies needed for notebook execution
+-r requirements.in
