@@ -1,0 +1,39 @@
+name: Test Notebooks on PR to Main
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-notebooks:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.13'
+
+    - name: Create EPX config directory
+      run: mkdir -p ~/.epx
+
+    - name: Create EPX config file
+      run: |
+        echo '{
+          "api-url": "${{ secrets.EPX_API_URL }}",
+          "bearer_token": "${{ secrets.EPX_BEARER_TOKEN }}"
+        }' > ~/.epx/config.json
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements_dev.txt
+
+    - name: Verify EPX installation
+      run: python -c "from epx import FREDJob, FREDModelConfig, SynthPop; print('epx import successful')"
+
+    - name: Run notebook tests
+      run: pytest tests/ -v
