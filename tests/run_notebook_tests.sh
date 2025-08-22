@@ -8,11 +8,21 @@ set -euox pipefail
 # Change to repository root directory
 cd "$(dirname "$0")/.."
 
+# Ensure cleanup on exit
+cleanup() {
+    set +e
+    type -t deactivate >/dev/null 2>&1 && deactivate || true
+    if [ -d "test_venv" ]; then
+        rm -r test_venv
+    fi
+}
+trap cleanup EXIT
+
 echo "Setting up notebook testing environment..."
 
 # Clean up any existing venv
 if [ -d "test_venv" ]; then
-    rm -rf test_venv
+    rm -r test_venv
 fi
 
 # Create and activate fresh virtual environment
@@ -20,6 +30,7 @@ python -m venv test_venv
 source test_venv/bin/activate
 
 pip install --upgrade pip
+pip install deps/epx-1.2.2-py3-none-any.whl
 pip install -r requirements_dev.txt
 
 # Verify epx installation
@@ -31,9 +42,6 @@ echo "Running notebook tests..."
 pytest tests/ -v
 
 TEST_RESULT=$?
-
-deactivate
-rm -rf test_venv
 
 # Report results
 if [ $TEST_RESULT -eq 0 ]; then
