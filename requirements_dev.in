@@ -1,2 +1,9 @@
 nbstripout
 black[jupyter]
+pytest
+nbmake
+ipykernel
+# Install epx from local wheel file
+./deps/epx-1.2.2-py3-none-any.whl
+# Runtime dependencies needed for notebook execution
+-r requirements.in

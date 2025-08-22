@@ -4,17 +4,17 @@ Welcome to the Epistemix Model Library. Here you can browse the ready-made model
 ## Models
 The models contained within this repository span multiple use-cases and can serve as a great starting point for your custom models.
 
-* [Asthma Events](Asthma-Events/README.md) - A model that gives some agents an asthma attribute, and triggers asthma events based on the input daily air quality (AQI). 
+* [Asthma Events](Asthma-Events/README.md) - A model that gives some agents an asthma attribute, and triggers asthma events based on the input daily air quality (AQI).
 * [Epstein Rebellion Model Geospatial](Epstein-Rebellion-Model-Geospatial/README.md) - This model captures the evolution of civil violence in a population split into regular agents, who are disaffected and willing to rebel if the conditions are right, and cop agents, who try to quell rebellion by jailing those agents. In this implementation, the households of Grand Isle County, VT serve as the locations between which agents move.
 * [Epstein Rebellion Model Grid](Epstein-Rebellion-Model-Grid/README.md) - This model captures the evolution of civil violence in a population split into regular agents, who are disaffected and willing to rebel if the conditions are right, and cop agents, who try to quell rebellion by jailing those agents. In this implementation, agents move across a simple grid.
 * [Finding a Local Doctor](Finding-a-Local-Doctor/README.md) - The Dr Office modernisation efficiency model is a FRED demonstration model exploring the effect of modernisation of healthcare services on healthcare outcomes.
 * [Flu Vacc](Flu-Vacc/README.md) - This model is an adaptation of a model originally implemented using NetLogo. In the model, agents experience successive flu seasons and, in each season, decide whether to adopt a highly effective, risk-free vaccine. An agent's decision to adopt the vaccine in the current season is self-interested, and they adapt their behavior based on their memory of previous flu seasons.
-* [Ground Shipping Logistics](Ground-Shipping-Logistics/README.md) - This model represents a ground transportation network. Cities represent nodes in the network and roads are edges. A table of trucks agents is read in at the beginning of the simulation. There are no human agents in the model. 
+* [Ground Shipping Logistics](Ground-Shipping-Logistics/README.md) - This model represents a ground transportation network. Cities represent nodes in the network and roads are edges. A table of trucks agents is read in at the beginning of the simulation. There are no human agents in the model.
 * [In Store Transactions](In-Store-Transactions/README.md) - This FRED model has all agents 18 and older go shopping. The number of stores,  items available, and item prices are specified in `/data/item_inventory_TRANSACTIONS.csv`. The job will print out receipts as agents shop at their chosen stores.
-* [Misinformation Model](Misinformation-Model/README.md) - This model begins by building a network to represent day-to-day in-person interactions between agents. It starts by stepping through the agents' daily schedules (as determined in the synthetic population) and randomly selecting other agents from "interaction pool" (e.g., the workplace, the block group) to become network links. 
+* [Misinformation Model](Misinformation-Model/README.md) - This model begins by building a network to represent day-to-day in-person interactions between agents. It starts by stepping through the agents' daily schedules (as determined in the synthetic population) and randomly selecting other agents from "interaction pool" (e.g., the workplace, the block group) to become network links.
 * [Monkeypox Outbreak](Monkeypox-Outbreak/README.md) - Modeling a Monkeypox outbreak in Allegheny County, where transmission specifically occurs in bathhouses.
 * [Non-Geospatial Schelling](Non-Geospatial-Schelling/README.md) - In this set of models, we explore the following question: How (if at all) do the dynamics of the classic Schelling model of residential segregation change if we change the topology of the network that determines what constitutes a "neighborhood"?
-* [Retirement Savings Equity](Retirement-Savings-Equity/README.md) - In this model, agents accumulate (and subsequently deplete) their retirement savings according to simple rules. 
+* [Retirement Savings Equity](Retirement-Savings-Equity/README.md) - In this model, agents accumulate (and subsequently deplete) their retirement savings according to simple rules.
 * [Schelling Housing Model](Schelling-Housing-Model/README.md) - The Schelling model of racial segregation in housing. This is a classic ABM that demonstrates how even slight preferences among a population for living next to others who are similar to themselves can lead to highly segregated neighborhoods.
 * [Simple Flu](Simple-Flu/README.md) - A model that represents the spread of influenza throughout a population, characterized with a compartmental Symptomatic-Exposed-Infectious-Recovered (SEIR) model.
 * [Water Usage](Water-Usage/README.md) - The objective of the water usage app model is to simulate household water use.
@@ -52,9 +52,20 @@ dependencies of our named dependencies) in `requirements.txt` from the abstract
 3. Commit changes to both `requirements.in` and `requirements.txt` to version
    control.
 
+### Testing
+
+Unit tests are available to verify that all Jupyter notebooks in the repository execute successfully.
+
+#### Running Tests
+Use the automated wrapper script:
+```shell
+./run_notebook_tests.sh
+```
+
 ### Deployment
+
 The `generate-manifest.sh` file is executed when a commit is pushed to the main or production branch.  There is a github action workflow that syncs the contents of the manifest to an S3 bucket and consumed by downstream services.  The main branch publishes to the development environment and the production branch publishes to the production environment, with corresponding S3 buckets `dev-model-library-assets` and `prod-model-library-assets`.
 
 ### Adding a new .toml file
 
-When adding a new toml file, it's important to include a `banner` key with a reference to an Epistemix logo png file.  You can find examples of this in the current Community Models as of 4/4/24. 
+When adding a new toml file, it's important to include a `banner` key with a reference to an Epistemix logo png file.  You can find examples of this in the current Community Models as of 4/4/24.
