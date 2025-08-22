@@ -57,7 +57,9 @@ dependencies of our named dependencies) in `requirements.txt` from the abstract
 Unit tests are available to verify that all Jupyter notebooks in the repository execute successfully.
 
 #### Running Tests
+
 Use the automated wrapper script:
+
 ```shell
 ./tests/run_notebook_tests.sh
 ```
