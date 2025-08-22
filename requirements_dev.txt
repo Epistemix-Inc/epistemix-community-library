@@ -4,8 +4,6 @@
 #
 #    pip-compile requirements_dev.in
 #
-annotated-types==0.7.0
-    # via pydantic
 anyio==4.10.0
     # via
     #   httpx
@@ -57,8 +55,6 @@ decorator==5.1.1
     # via ipython
 defusedxml==0.7.1
     # via nbconvert
-epx @ file:///home/user/Repositories/epistemix-community-library/deps/epx-1.2.2-py3-none-any.whl
-    # via -r requirements_dev.in
 executing==1.2.0
     # via stack-data
 fastjsonschema==2.17.1
@@ -87,7 +83,6 @@ ipykernel==6.30.1
     # via
     #   -r requirements_dev.in
     #   jupyterlab
-    #   nbmake
 ipython==8.13.2
     # via
     #   black
@@ -162,39 +157,32 @@ mistune==3.1.3
 mypy-extensions==1.0.0
     # via black
 nbclient==0.10.2
-    # via
-    #   nbconvert
-    #   nbmake
+    # via nbconvert
 nbconvert==7.16.6
-    # via jupyter-server
+    # via
+    #   -r requirements_dev.in
+    #   jupyter-server
 nbformat==5.8.0
     # via
     #   jupyter-server
     #   nbclient
     #   nbconvert
-    #   nbmake
     #   nbstripout
-nbmake==1.5.5
-    # via -r requirements_dev.in
 nbstripout==0.6.1
     # via -r requirements_dev.in
 nest-asyncio==1.6.0
     # via ipykernel
 networkx==3.4.2
-    # via
-    #   -r requirements.in
-    #   epx
+    # via -r requirements.in
 notebook-shim==0.2.4
     # via jupyterlab
 numpy==1.26.4
     # via
     #   -r requirements.in
     #   contourpy
-    #   epx
     #   folium
     #   matplotlib
     #   pandas
-    #   types-networkx
 overrides==7.7.0
     # via jupyter-server
 packaging==23.1
@@ -209,9 +197,7 @@ packaging==23.1
     #   plotly
     #   pytest
 pandas==2.3.2
-    # via
-    #   -r requirements.in
-    #   epx
+    # via -r requirements.in
 pandocfilters==1.5.1
     # via nbconvert
 parso==0.8.3
@@ -244,32 +230,19 @@ ptyprocess==0.7.0
     #   terminado
 pure-eval==0.2.2
     # via stack-data
-pyarrow==21.0.0
-    # via epx
 pycparser==2.22
     # via cffi
-pydantic==2.11.7
-    # via epx
-pydantic-core==2.33.2
-    # via pydantic
-pydot==4.0.1
-    # via epx
 pygments==2.15.1
     # via
     #   ipython
     #   nbconvert
-    #   nbmake
     #   pytest
 pyparsing==3.2.3
-    # via
-    #   matplotlib
-    #   pydot
+    # via matplotlib
 pyrsistent==0.19.3
     # via jsonschema
 pytest==8.4.1
-    # via
-    #   -r requirements_dev.in
-    #   nbmake
+    # via -r requirements_dev.in
 python-dateutil==2.9.0.post0
     # via
     #   arrow
@@ -289,7 +262,6 @@ pyzmq==27.0.2
     #   jupyter-server
 requests==2.32.5
     # via
-    #   epx
     #   folium
     #   jupyterlab-server
 rfc3339-validator==0.1.4
@@ -343,18 +315,10 @@ traitlets==5.9.0
     #   nbclient
     #   nbconvert
     #   nbformat
-types-networkx==3.5.0.20250822
-    # via epx
 types-python-dateutil==2.9.0.20250822
     # via arrow
 typing-extensions==4.14.1
-    # via
-    #   beautifulsoup4
-    #   pydantic
-    #   pydantic-core
-    #   typing-inspection
-typing-inspection==0.4.1
-    # via pydantic
+    # via beautifulsoup4
 tzdata==2025.2
     # via pandas
 uri-template==1.3.0
