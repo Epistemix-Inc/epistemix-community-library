@@ -3,6 +3,7 @@ name: Test Notebooks on PR to Main
 on:
   pull_request:
     branches: [main]
+  workflow_dispatch:
 
 jobs:
   test-notebooks:
@@ -20,8 +21,7 @@ jobs:
       - name: Create EPX config directory
         run: mkdir -p ~/.epx
 
-      - name: Create EPX config file (if secrets provided)
-        if: ${{ secrets.EPX_API_URL != '' && secrets.EPX_BEARER_TOKEN != '' }}
+      - name: Create EPX config file
         run: |
           echo '{
             "api-url": "${{ secrets.EPX_API_URL }}",
