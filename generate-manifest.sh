@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# Fail the job (before S3 is cleared) if any fred.toml cannot be parsed.
+set -e
+
 pip install tomlq
 
 touch manifest.toml && echo "" > manifest.toml
